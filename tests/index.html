@@ -10,6 +10,9 @@
 		.tests li {
 			color: orange;
 		}
+		.tests.invalid {
+			list-style-type: upper-alpha;
+		}
 	</style>
 	
 	<style>
@@ -265,7 +268,6 @@
 			<li id="simple">Nothing special going on with this test.</li>
 			<li id="all-media-rule">A @media rule whose query is "all".</li>
 			<li id="empty-media-rule">A @media rule whose query is empty.</li>
-			<li id="all-and-all">If this is visible, this browser supports "@media all and all" (which is technically invalid).</li>
 			<li id="all-media-attribute">A style element with a media attribute whose value is "all".</li>
 			<li id="all-media-attribute-and-rule">A style element with a media attribute whose value is "all" containing a @media rule whose query is "all".</li>
 			<li id="only-whitespace-media-queries">Media queries with only whitespace.</li>
@@ -281,9 +283,7 @@
 			<li id="not-screen-media-rule">A @media rule whose query is "not screen".</li>
 			<li id="print-media-rule">A @media rule whose query is "print".</li>
 			<li id="not-screen-media-attribute-and-print-media-rule">A @media rule whose query is "print" in a style element with a media attribute whose value is "not screen".</li>
-			<li id="not-screen-and-print">If this is visible, this browser supports "@media not screen and print" (which is technically invalid).</li>
 			
-			<li id="screen-media-attribute-and-not-screen-media-rule"><strong>Your browser is insane</strong>: If this is visible, both "screen" and "not screen" are true.</li>
 			<li id="noprefix">A style element with the "data-noprefix" attribute.</li>
 			<li id="link-noprefix">A link element with the "data-noprefix" attribute.</li>
 			
@@ -296,8 +296,6 @@
 			<li id="print-link">A linked stylesheet with a media attribute whose value is "print".</li>
 			<li id="print-link-not-screen-media-rule">A "not screen" @media rule in a linked "print" stylesheet.</li>
 			<li id="print-link-complex-query">A complex @media rule in a linked "print" stylesheet.</li>
-			<li id="print-link-screen-media-rule"><strong>Your browser is insane</strong>: If this is visible, both "print" and "screen" are true.</li>
-			<li id="print-link-not-print-media-rule"><strong>Your browser is insane</strong>: If this is visible, both "print" and "not print" are true.</li>
 			
 			<li id="import">A simple @import.</li><!-- FIXME: Fails in IE9. -->
 			<li id="import-screen">An @import with a "screen" media query.</li><!-- FIXME: Fails in IE9. -->
@@ -305,26 +303,33 @@
 			<li id="import-complex">An @import with a complex media query whose stylesheet contains a complex @media rule.</li><!-- FIXME: Fails in IE9. -->
 			<li id="imported-css-data-uri">An @imported CSS data URI.</li><!-- FIXME: Fails in IE9. -->
 			<li id="imported-screen-css-data-uri">An @imported CSS data URI with a "screen" media query.</li><!-- FIXME: Fails in IE9. -->
-			<!-- FIXME: These crash IE9; see http://jsfiddle.net/QCMQT
-			<li id="import-from-data-uri">An @imported CSS data URI which contains a "regular" @import of an external stylesheet.</li>
-			<li id="import-2">An @import inside another @import.</li>
-			<li id="inception-imported-css-data-uri">An @imported CSS data URI which contains another @imported CSS data URI.</li>
-			<li id="base64-inception-imported-css-data-uri">An @imported base64-encoded CSS data URI which contains another @imported (non-base64-encoded) CSS data URI.</li>
-			-->
 			<li id="imported-css-data-uri-with-media-rule">An @imported CSS data URI which contains a @media rule.</li><!-- FIXME: Fails in IE9. -->
-			<li id="background-image-data-uri">A background-image using a data URI.</li><!-- FIXME: Fails in IE9 after "beforeprint" event (in the fix-109-print-event-import branch). -->
+			<li id="background-image-data-uri">A background-image using a data URI.</li>
 			
 			<li id="utf-8">A style element containing non-ASCII characters (document charset is UTF-8).</li>
 			<li id="link-with-charset-rule-utf-8">A linked stylesheet with a UTF-8 @charset rule containing non-ASCII characters (document charset is UTF-8).</li>
 			<li id="link-with-charset-rule-latin-1">A linked stylesheet with a ISO-8859-1 @charset rule containing non-ASCII characters (document charset is UTF-8).</li><!-- FIXME? Fails in lots of browsers, but might not be worth fixing. -->
 			<li id="import-link">A linked stylesheet containing an @imported stylesheet.</li><!-- FIXME: This *randomly* fails in IE9... reload a bunch of times to see. -->
 			<li id="linked-imported-css-data-uri">A linked stylesheet containing an @imported CSS data URI.</li>
-			<!-- FIXME: This can crash IE9; see http://jsfiddle.net/QCMQT
-			<li id="linked-inception-imported-css-data-uri">A linked stylesheet containing an @imported CSS data URI which contains another @imported CSS data URI.</li>
-			-->
 			
 			<li style="color: green">A simple style attribute.</li>
 			<li style="color: green; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAIAAAAW4yFwAAAAAXNSR0IArs4c6QAAABBJREFUCNdjYPjPwPSf4T8ACgYDAPlBc+oAAAAASUVORK5CYII=');">A style attribute with a background-image using a data URI.</li>
+			
+			<!-- FIXME: These crash IE9; see http://jsfiddle.net/QCMQT
+			<li id="import-from-data-uri">An @imported CSS data URI which contains a "regular" @import of an external stylesheet.</li>
+			<li id="import-2">An @import inside another @import.</li>
+			<li id="inception-imported-css-data-uri">An @imported CSS data URI which contains another @imported CSS data URI.</li>
+			<li id="base64-inception-imported-css-data-uri">An @imported base64-encoded CSS data URI which contains another @imported (non-base64-encoded) CSS data URI.</li>
+			<li id="linked-inception-imported-css-data-uri">A linked stylesheet containing an @imported CSS data URI which contains another @imported CSS data URI.</li>
+			-->
+		</ol>
+		
+		<ol class="tests invalid">
+			<li id="all-and-all">If this is visible, this browser supports "@media all and all" (which is technically invalid).</li>
+			<li id="not-screen-and-print">If this is visible, this browser supports "@media not screen and print" (which is technically invalid).</li>
+			<li id="screen-media-attribute-and-not-screen-media-rule"><strong>Your browser is insane</strong>: If this is visible, both "screen" and "not screen" are true.</li>
+			<li id="print-link-screen-media-rule"><strong>Your browser is insane</strong>: If this is visible, both "print" and "screen" are true.</li>
+			<li id="print-link-not-print-media-rule"><strong>Your browser is insane</strong>: If this is visible, both "print" and "not print" are true.</li>
 		</ol>
 	</section>
 	
