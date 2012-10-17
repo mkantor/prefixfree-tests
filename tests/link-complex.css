@@ -1,0 +1,5 @@
+@media not braille and (color) and (scan) {
+	#link-complex {
+		color: green;
+	}
+}

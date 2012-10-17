@@ -1,0 +1,30 @@
+#print-link {
+	color: purple;
+}
+
+@media not screen {
+	#print-link-not-screen-media-rule {
+		color: purple;
+	}
+}
+
+@media only print and (min-width:0px) and (max-width:100000px) and (grid), not (scan: progressive) {
+	#print-link-complex-query {
+		color: purple;
+	}
+}
+
+/* these are hidden in <style> elements to protect the innocent */
+@media screen {
+	#print-link-screen-media-rule {
+		color: red;
+		display: list-item;
+	}
+}
+@media not print {
+	#print-link-not-print-media-rule {
+		color: red;
+		display: list-item;
+	}
+}
+
