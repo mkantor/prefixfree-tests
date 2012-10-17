@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>-prefix-free test</title>
+	
+	<!--####################################################################-->
+	
+	<style>
+		.tests li {
+			color: orange;
+		}
+	</style>
+	
+	<style>
+		#simple {
+			color: green;
+		}
+		
+		@media all {
+			#all-media-rule {
+				color: green;
+			}
+		}
+		
+		@media {
+			#empty-media-rule {
+				color: green;
+			}
+		}
+		
+		/* technically "all and all" is an invalid media query; 
+		   hide it for browsers that follow the spec */
+		#all-and-all {
+			display: none;
+		}
+		@media all and all {
+			#all-and-all {
+				display: list-item;
+				color: green;
+			}
+		}
+	</style>
+	<style media="all">
+		#all-media-attribute {
+			color: green;
+		}
+		@media all {
+			#all-media-attribute-and-rule {
+				color: green;
+			}
+		}
+	</style>
+	<style media="     ">
+		@media         {
+			#only-whitespace-media-queries {
+				color: green;
+			}
+		}
+		@media     all    {
+			#whitespace-and-all {
+				color: green;
+			}
+		}
+	</style>
+	
+	<style media="(min-width:0px)">
+		#typeless-query-in-media-attribute {
+			color: green;
+		}
+	</style>
+	<style media="all    and   (min-width:0px)    ">
+		@media (min-width:    0px)     {
+			#complex-queries-1 {
+				color: green;
+			}
+		}
+	</style>
+	<style media="not somethingyouneverheardof">
+		@media only all and (min-width:0px) and (max-width:100000px) {
+			#complex-queries-2 {
+				color: green;
+			}
+		}
+	</style>
+	<style>
+		@media all {
+			@media all {
+				#nested-media-rules {
+					color: green;
+				}
+			}
+		}
+	</style>
+	
+	<style media="screen">
+		#screen-media-attribute {
+			color: navy;
+		}
+	</style>
+	
+	<style>
+		@media screen {
+			#screen-media-rule {
+				color: navy;
+			}
+		}
+		@media not screen {
+			#not-screen-media-rule {
+				color: purple;
+			}
+		}
+		@media print {
+			#print-media-rule {
+				color: purple;
+			}
+		}
+		
+		/* technically "not screen and print" is an invalid media query; 
+		   hide it for browsers that follow the spec */
+		#not-screen-and-print {
+			display: none;
+		}
+		@media not screen and print {
+			#not-screen-and-print {
+				display: list-item;
+				color: purple;
+			}
+		}
+	</style>
+	
+	<style media="not screen">
+		@media print {
+			#not-screen-media-attribute-and-print-media-rule {
+				color: purple;
+			}
+		}
+	</style>
+	
+	<style>
+		/* as long as there is a shred of sanity, this should never be displayed */
+		#screen-media-attribute-and-not-screen-media-rule {
+			display: none;
+		}
+	</style>
+	<style media="screen">
+		@media not screen {
+			#screen-media-attribute-and-not-screen-media-rule {
+				display: list-item;
+				color: red;
+			}
+		}
+	</style>
+	
+	<style data-noprefix>
+		#noprefix {
+			color: green;
+		}
+	</style>
+	<link rel="stylesheet" href="link-noprefix.css" data-noprefix />
+	
+	<link rel="stylesheet" href="link.css" />
+	<link rel="stylesheet" href="link-complex.css" media="only all and (min-width:0px) and (max-height:100000px)" />
+	
+	<style>
+		/* these should never be true (they're specified in print.css) */
+		#print-link-screen-media-rule,
+		#print-link-not-print-media-rule {
+			display: none;
+		}
+	</style>
+	<link rel="stylesheet" href="link-print.css" media="print" />
+	
+	<style>
+		@import url("import.css");
+		@import url("import-screen.css") screen;
+		@import url("import-print.css") print;
+		@import url("import-complex.css") somethingthatwontmatch and (color), (min-device-width: 0px) and (max-monochrome: 10000);
+		
+		@import url("data:text/css;charset=UTF-8,%23imported-css-data-uri%7Bcolor%3Agreen%3B%7D");
+		@import url("data:text/css;charset=UTF-8,%23imported-screen-css-data-uri%7Bcolor%3Anavy%3B%7D") screen;
+		
+		/* FIXME: These crash IE9 (nested @imports); see http://jsfiddle.net/QCMQT
+		@import url("data:text/css;charset=UTF-8,%40import%20url%28%22import-from-data-uri.css%22%29");
+		@import url("data:text/css;charset=UTF-8,%40import%20url%28%22data%3Atext%2Fcss%3Bcharset%3DUTF-8%2C%2523inception-imported-css-data-uri%257Bcolor%253Agreen%253B%257D%22%29%3B");
+		@import url("data:text/css;charset=UTF-8;base64,QGltcG9ydCB1cmwoImRhdGE6dGV4dC9jc3M7Y2hhcnNldD1VVEYtOCwlMjNiYXNlNjQtaW5jZXB0aW9uLWltcG9ydGVkLWNzcy1kYXRhLXVyaSU3QmNvbG9yJTNBZ3JlZW4lM0IlN0QiKTs=");
+		*/
+		
+		@import url("data:text/css;charset=UTF-8,%40media%20%28min-width%3A0px%29%7B%23imported-css-data-uri-with-media-rule%7Bcolor%3Agreen%7D%7D");
+		
+		#background-image-data-uri {
+			background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAIAAAAW4yFwAAAAAXNSR0IArs4c6QAAABBJREFUCNdjYPjPwPSf4T8ACgYDAPlBc+oAAAAASUVORK5CYII=");
+			color: green;
+		}
+	</style>
+	
+	<style>
+		#utf-8 {
+			color: green;
+		}
+		#utf-8::before {
+			content: '(；一_一) ';
+		}
+	</style>
+	<link rel="stylesheet" href="charset-rule.utf-8.css" />
+	<link rel="stylesheet" href="charset-rule.latin-1.css" />
+	
+	<!--####################################################################-->
+	
+	<script>
+		// if the querystring contains "noprefix", don't load include the library
+		var includePrefixfree = window.location.search.search(/\bnoprefix\b/) === -1;
+		if (includePrefixfree) {
+			document.write('<script src="../prefixfree.js"><\/script>');
+		}
+		document.addEventListener('DOMContentLoaded', function() {
+			var indicator = document.getElementById('prefixfree-indicator');
+			var toggle = document.getElementById('prefixfree-toggle');
+			if (includePrefixfree) {
+				indicator.textContent = '-prefix-free is active on this page';
+				toggle.href = '?noprefix';
+				toggle.textContent = 'Reload this page without -prefix-free.';
+			}
+			else {
+				indicator.textContent = '-prefix-free is not active on this page';
+				toggle.href = '?';
+				toggle.textContent = 'Reload this page with -prefix-free.';
+			}
+		}, false);
+	</script>
+</head>
+<body>
+	<header>
+		<h1 id="prefixfree-indicator"></h1>
+		<nav><a id="prefixfree-toggle"></a></nav>
+	</header>
+	
+	<section class="regression-tests">
+		<header>
+			<p>These tests are meant to ensure that -prefix-free doesn't break anything that works with normal CSS. That is, it's not intended to test prefixing, just to do regression testing between -prefix-free and vanilla CSS (to ensure that you can safely drop -prefix-free into any page).</p>
+			<p>You can add the querystring "?noprefix" to view this page without -prefix-free and make sure it looks the same.</p>
+			<p>Generally, text should be green/navy/orange on screen and green/purple/orange in print (in well-behaved browsers). However, actually passing all tests just means that things look identical with and without the ?noprefix flag.</p>
+		</header>
+		
+		<ul class="tests">
+			<li id="simple">Nothing special going on with this test.</li>
+			<li id="all-media-rule">A @media rule whose query is "all".</li>
+			<li id="empty-media-rule">A @media rule whose query is empty.</li>
+			<li id="all-and-all">If this is visible, this browser supports "@media all and all" (which is technically invalid).</li>
+			<li id="all-media-attribute">A style element with a media attribute whose value is "all".</li>
+			<li id="all-media-attribute-and-rule">A style element with a media attribute whose value is "all" containing a @media rule whose query is "all".</li>
+			<li id="only-whitespace-media-queries">Media queries with only whitespace.</li>
+			<li id="whitespace-and-all">Media queries with whitespace and "all".</li>
+			<li id="typeless-query-in-media-attribute">A media attribute with a typeless media query.</li>
+			<li id="complex-queries-1">A complex query.</li>
+			<li id="complex-queries-2">Another complex query.</li>
+			<li id="nested-media-rule">Nested @media rules.</li>
+			
+			<li id="screen-media-attribute">Media attribute whose value is "screen".</li>
+			<li id="screen-media-rule">A @media rule whose query is "screen".</li>
+			
+			<li id="not-screen-media-rule">A @media rule whose query is "not screen".</li>
+			<li id="print-media-rule">A @media rule whose query is "print".</li>
+			<li id="not-screen-media-attribute-and-print-media-rule">A @media rule whose query is "print" in a style element with a media attribute whose value is "not screen".</li>
+			<li id="not-screen-and-print">If this is visible, this browser supports "@media not screen and print" (which is technically invalid).</li>
+			
+			<li id="screen-media-attribute-and-not-screen-media-rule"><strong>Your browser is insane</strong>: If this is visible, both "screen" and "not screen" are true.</li>
+			<li id="noprefix">A style element with the "data-noprefix" attribute.</li>
+			<li id="link-noprefix">A link element with the "data-noprefix" attribute.</li>
+			
+			<li id="link">A simple linked stylesheet.</li>
+			<li id="link-screen-media-rule">A "screen" @media rule in a linked stylesheet.</li>
+			<li id="link-print-media-rule">A "print" @media rule in a linked stylesheet.</li>
+			<li id="link-background-image-data-uri">A background-image using a data URI in a linked stylesheet.</li>
+			<li id="link-complex">A complex @media rule in a linked stylesheet which has a a complex media attribute.</li>
+			
+			<li id="print-link">A linked stylesheet with a media attribute whose value is "print".</li>
+			<li id="print-link-not-screen-media-rule">A "not screen" @media rule in a linked "print" stylesheet.</li>
+			<li id="print-link-complex-query">A complex @media rule in a linked "print" stylesheet.</li>
+			<li id="print-link-screen-media-rule"><strong>Your browser is insane</strong>: If this is visible, both "print" and "screen" are true.</li>
+			<li id="print-link-not-print-media-rule"><strong>Your browser is insane</strong>: If this is visible, both "print" and "not print" are true.</li>
+			
+			<li id="import">A simple @import.</li><!-- FIXME: Fails in IE9. -->
+			<li id="import-screen">An @import with a "screen" media query.</li><!-- FIXME: Fails in IE9. -->
+			<li id="import-print">An @import with a "print" media query.</li><!-- FIXME: Fails in IE9. -->
+			<li id="import-complex">An @import with a complex media query whose stylesheet contains a complex @media rule.</li><!-- FIXME: Fails in IE9. -->
+			<li id="imported-css-data-uri">An @imported CSS data URI.</li><!-- FIXME: Fails in IE9. -->
+			<li id="imported-screen-css-data-uri">An @imported CSS data URI with a "screen" media query.</li><!-- FIXME: Fails in IE9. -->
+			<!-- FIXME: These crash IE9; see http://jsfiddle.net/QCMQT
+			<li id="import-from-data-uri">An @imported CSS data URI which contains a "regular" @import of an external stylesheet.</li>
+			<li id="import-2">An @import inside another @import.</li>
+			<li id="inception-imported-css-data-uri">An @imported CSS data URI which contains another @imported CSS data URI.</li>
+			<li id="base64-inception-imported-css-data-uri">An @imported base64-encoded CSS data URI which contains another @imported (non-base64-encoded) CSS data URI.</li>
+			-->
+			<li id="imported-css-data-uri-with-media-rule">An @imported CSS data URI which contains a @media rule.</li><!-- FIXME: Fails in IE9. -->
+			<li id="background-image-data-uri">A background-image using a data URI.</li><!-- FIXME: Fails in IE9 after "beforeprint" event (in the fix-109-print-event-import branch). -->
+			
+			<li id="utf-8">A style element containing non-ASCII characters (document charset is UTF-8).</li>
+			<li id="link-with-charset-rule-utf-8">A linked stylesheet with a UTF-8 @charset rule containing non-ASCII characters (document charset is UTF-8).</li>
+			<li id="link-with-charset-rule-latin-1">A linked stylesheet with a ISO-8859-1 @charset rule containing non-ASCII characters (document charset is UTF-8).</li><!-- FIXME? Fails in lots of browsers, but might not be worth fixing. -->
+			<li id="import-link">A linked stylesheet containing an @imported stylesheet.</li><!-- FIXME: This *randomly* fails in IE9... reload a bunch of times to see. -->
+			<li id="linked-imported-css-data-uri">A linked stylesheet containing an @imported CSS data URI.</li>
+			<!-- FIXME: This can crash IE9; see http://jsfiddle.net/QCMQT
+			<li id="linked-inception-imported-css-data-uri">A linked stylesheet containing an @imported CSS data URI which contains another @imported CSS data URI.</li>
+			-->
+			
+			<li style="color: green">A simple style attribute.</li>
+			<li style="color: green; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAIAAAAW4yFwAAAAAXNSR0IArs4c6QAAABBJREFUCNdjYPjPwPSf4T8ACgYDAPlBc+oAAAAASUVORK5CYII=');">A style attribute with a background-image using a data URI.</li>
+		</ul>
+	</section>
+	
+	<!-- TODO: add more sections to test actual prefixing, special data attributes, etc -->
+	
+</body>
+</html>

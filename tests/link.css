@@ -1,0 +1,26 @@
+@import url("import-link.css");
+@import url("data:text/css;charset=UTF-8,%23linked-imported-css-data-uri%7Bcolor%3Agreen%3B%7D");
+/* FIXME: This can crash IE9 (nested @imports); see http://jsfiddle.net/QCMQT
+@import url("data:text/css;charset=UTF-8,%40import%20url%28%22data%3Atext%2Fcss%3Bcharset%3DUTF-8%2C%2523linked-inception-imported-css-data-uri%257Bcolor%253Agreen%253B%257D%22%29%3B");
+*/
+
+#link {
+	color: green;
+}
+
+#link-background-image-data-uri {
+	background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAIAAAAW4yFwAAAAAXNSR0IArs4c6QAAABBJREFUCNdjYPjPwPSf4T8ACgYDAPlBc+oAAAAASUVORK5CYII=");
+	color: green;
+}
+
+@media screen {
+	#link-screen-media-rule {
+		color: navy;
+	}
+}
+
+@media print {
+	#link-print-media-rule {
+		color: purple;
+	}
+}

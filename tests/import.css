@@ -1,0 +1,7 @@
+/* FIXME: This crashes IE9 (nested @imports); see http://jsfiddle.net/QCMQT
+@import url("import-2.css");
+*/
+
+#import {
+	color: green;
+}

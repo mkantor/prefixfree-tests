@@ -1,0 +1,7 @@
+@charset "UTF-8";
+#link-with-charset-rule-utf-8 {
+	color: green;
+}
+#link-with-charset-rule-utf-8::before {
+	content: '(づ￣ ³￣)づ ';
+}
