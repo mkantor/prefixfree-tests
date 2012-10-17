@@ -208,23 +208,42 @@
 	<!--####################################################################-->
 	
 	<script>
-		// if the querystring contains "noprefix", don't load include the library
-		var includePrefixfree = window.location.search.search(/\bnoprefix\b/) === -1;
-		if (includePrefixfree) {
-			document.write('<script src="../prefixfree.js"><\/script>');
+		// Conditionally load -prefix-free.
+		
+		var defaultPrefixfreeUrl = '../prefixfree.js';
+		var noPrefixfreePattern = /[?&]noprefix(?:[&#]|$)/;
+		var prefixfreeUrlPattern = /[?&]prefixfree-url=([^&#]*)/;
+		
+		// If the querystring contains "noprefix", don't load the library.
+		var includePrefixfree = noPrefixfreePattern.test(window.location.search) === false;
+		
+		// Allow specifying the location of -prefix-free (to enable easy comparison between versions).
+		var prefixfreeUrl = defaultPrefixfreeUrl;
+		if (prefixfreeUrlPattern.test(window.location.search)) {
+			prefixfreeUrl = decodeURIComponent(window.location.search.match(prefixfreeUrlPattern)[1]);
 		}
+		
+		if (includePrefixfree) {
+			document.write('<script src="' + prefixfreeUrl + '"><\/script>');
+		}
+		
 		document.addEventListener('DOMContentLoaded', function() {
 			var indicator = document.getElementById('prefixfree-indicator');
 			var toggle = document.getElementById('prefixfree-toggle');
 			if (includePrefixfree) {
-				indicator.textContent = '-prefix-free is active on this page';
+				indicator.innerHTML = '-prefix-free is active on this page (<a href="' + prefixfreeUrl + '">' + prefixfreeUrl + '<\/a>)';
+				toggle.innerHTML = 'Reload this page without -prefix-free.';
 				toggle.href = '?noprefix';
-				toggle.textContent = 'Reload this page without -prefix-free.';
 			}
 			else {
-				indicator.textContent = '-prefix-free is not active on this page';
+				indicator.innerHTML = '-prefix-free is not active on this page';
+				toggle.innerHTML = 'Reload this page with -prefix-free  (' + prefixfreeUrl + ').';
 				toggle.href = '?';
-				toggle.textContent = 'Reload this page with -prefix-free.';
+			}
+			
+			// Make sure the prefixfre-url parameter is passed through when toggling -prefix-free.
+			if (prefixfreeUrl != defaultPrefixfreeUrl) {
+				toggle.href += '&prefixfree-url=' + encodeURIComponent(prefixfreeUrl);
 			}
 		}, false);
 	</script>
